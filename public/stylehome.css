@@ -14,7 +14,7 @@
 }
 
 #thoughts-container {
-    background-image: url("C:/Users/17204/Desktop/Desktop/Coding/BlogPage/page/ThoughtsBKG.png");
+    background-image: url("ThoughtsBKG.png");
     background-size: cover;
     background-position: 35% 80%;
     grid-row: 1;
@@ -22,7 +22,7 @@
 }
 
 #projects-container {
-    background-image: url("C:/Users/17204/Desktop/Desktop/Coding/BlogPage/page/ProjectsBKG.png");
+    background-image: url("ProjectsBKG.png");
     background-size: cover;
     background-position: 35% 70%;
     grid-row: 2;
