@@ -33,10 +33,6 @@ function readData() {
 }
 
 window.onload = function() {
-    readData(); 
-    var posts = document.querySelector(".posts").querySelectorAll("a");
-    for(let i = 0; i < posts.length; i++) {
-        posts[i].innerHTML = "Post" + (i+1); //change this to title of document
-    }
+  readData(); 
 }
 
