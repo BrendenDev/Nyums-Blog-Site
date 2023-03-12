@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -18,25 +18,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-function readData() {
-  const reference = ref(db, 'blogs/');
-  
-  get(reference).then((response) => {
-    if(response.exists()) {
-      console.log(response.val());
-    } else {
-      console.log("No data available");
-    }
-  }).catch((error)=> {
-    console.log(error);
-  });
-}
-
 window.onload = function() {
-    readData(); 
-    var posts = document.querySelector(".posts").querySelectorAll("a");
-    for(let i = 0; i < posts.length; i++) {
-        posts[i].innerHTML = "Post" + (i+1); //change this to title of document
-    }
+  readBlogData().then((response) => {
+    console.log(response);
+  });
+  var posts = document.querySelector(".posts").querySelectorAll("a");
+  for(let i = 0; i < posts.length; i++) {
+      posts[i].innerHTML = "Post" + (i+1); //change this to title of document
+  }
 }
 
+async function readBlogData() {
+  const reference = ref(db, 'blogs/'); 
+  const data = new Map(); 
+  let blogCount = -1; 
+
+  onValue(reference, (snapshot) => {
+    snapshot.forEach((ss) => {
+      let tempMap = new Map(); 
+      blogCount++; 
+      ss.forEach((s) => { 
+        if(s.key == "author") {
+          tempMap.set("author", s.val());
+        }
+        else if(s.key == "content") {
+          tempMap.set("content", s.val());
+        }
+      })
+      data.set(ss.key, tempMap);
+    });
+  }, {
+    onlyOnce: true
+  });
+
+  return data; 
+}
