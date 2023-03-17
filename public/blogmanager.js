@@ -18,9 +18,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+const blogList = []; 
+
 window.onload = function() {
-  readBlogData().then((response) => {
-    console.log(response);
+  
+  readBlogData().then( response => {
+    console.log(blogList);
   });
   var posts = document.querySelector(".posts").querySelectorAll("a");
   for(let i = 0; i < posts.length; i++) {
@@ -30,9 +33,26 @@ window.onload = function() {
 
 async function readBlogData() {
   const reference = ref(db, 'blogs/'); 
-  const data = new Map(); 
-  let blogCount = -1; 
 
+  onValue(reference, (snapshot) => {
+    snapshot.forEach((ss) => {
+      blogList.push(parseInt(ss.key.replaceAll("-",""))); //parses all blog dates to numbers to compare
+    });
+    blogList.sort((a, b) => {return b - a});
+  }, {
+    onlyOnce: true
+  });
+}
+
+function setBlogs() {
+  console.log(blogList);
+  for(let i = 0; i < blogList.length; i++) {
+    console.log(blogList[i]);
+  }
+}
+
+//get full info
+  /*let blogCount = -1;
   onValue(reference, (snapshot) => {
     snapshot.forEach((ss) => {
       let tempMap = new Map(); 
@@ -49,7 +69,4 @@ async function readBlogData() {
     });
   }, {
     onlyOnce: true
-  });
-
-  return data; 
-}
+  }); */
