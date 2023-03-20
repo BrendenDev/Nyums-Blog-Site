@@ -18,55 +18,27 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const blogList = []; 
-
 window.onload = function() {
-  
-  readBlogData().then( response => {
-    console.log(blogList);
-  });
   var posts = document.querySelector(".posts").querySelectorAll("a");
   for(let i = 0; i < posts.length; i++) {
       posts[i].innerHTML = "Post" + (i+1); //change this to title of document
   }
+  setBlogs(posts);
 }
 
-async function readBlogData() {
+async function setBlogs(posts) {
   const reference = ref(db, 'blogs/'); 
 
   onValue(reference, (snapshot) => {
+    let tempMap = new Map(); 
     snapshot.forEach((ss) => {
-      blogList.push(parseInt(ss.key.replaceAll("-",""))); //parses all blog dates to numbers to compare
+      tempMap.set(parseInt(ss.key.replaceAll("-","")), ss.child("title").val());
     });
-    blogList.sort((a, b) => {return b - a});
+    const blogs = new Map([...tempMap.entries()].sort().reverse());
+    for(let i = 0; i < blogs.size; i++) {
+      posts[i].innerHTML = blogs.get(Array.from(blogs.keys())[i]);
+    }
   }, {
     onlyOnce: true
   });
 }
-
-function setBlogs() {
-  console.log(blogList);
-  for(let i = 0; i < blogList.length; i++) {
-    console.log(blogList[i]);
-  }
-}
-
-//get full info
-  /*let blogCount = -1;
-  onValue(reference, (snapshot) => {
-    snapshot.forEach((ss) => {
-      let tempMap = new Map(); 
-      blogCount++; 
-      ss.forEach((s) => { 
-        if(s.key == "author") {
-          tempMap.set("author", s.val());
-        }
-        else if(s.key == "content") {
-          tempMap.set("content", s.val());
-        }
-      })
-      data.set(ss.key, tempMap);
-    });
-  }, {
-    onlyOnce: true
-  }); */

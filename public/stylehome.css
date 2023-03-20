@@ -11,6 +11,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 15px;
 }
 
 #thoughts-container {
@@ -53,6 +54,20 @@
 }
 
 .recent-container .posts a:hover {
+    color: #0073e6;
+}
+
+.side-head {
+    transform: scale(1.1);
+    background-color: rgb(169,169,169, 0.65);
+    padding-left: 7.5%;
+    padding-right: 7.5%;
+    padding-top: 4%;
+    padding-bottom: 4%;
+    border-radius: 15px;
+}
+
+.other-pages:hover {
     color: #0073e6;
 }
 
