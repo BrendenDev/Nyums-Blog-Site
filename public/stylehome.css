@@ -6,6 +6,10 @@
     gap: 5px;
 }
 
+.post {
+    cursor:pointer;
+}
+
 .other-pages {
     grid-column: 3;
     display: flex;
