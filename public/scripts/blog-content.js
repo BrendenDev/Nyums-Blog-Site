@@ -19,17 +19,22 @@ const db = getDatabase(app);
 
 window.onload = function() {
     document.getElementById('blog-title').innerHTML = localStorage.getItem('openedPage');
-    let blogDate = localStorage.getItem('openPageDate');
+    let blogDate = localStorage.getItem('openedPageDate');
+    //console.log(localStorage.getItem('openedPageDate'));
     //need to fix this - purpose is to make string from date int, so it can find the specific blog in the database
     const date = blogDate.toString().substring(0,4) + "-" + blogDate.toString().substring(4, 6) + "-" + blogDate.toString().substring(6,8);
     setPage(date);
 };
 
 async function setPage(date) {
-    const reference = ref(db, 'blogs/');
-    onValue(reference + date + '/', (snapshot) => {
-        console.log(snapshot.val());
-      }, {
-        onlyOnce: true
+    const reference = ref(db, 'blogs/' + date + '/');
+    onValue(reference, (snapshot) => {
+      document.getElementById("blog-author").innerHTML = snapshot.child("author").val();
+      snapshot.child("content").forEach((ss) => {
+        const paragraph = document.querySelector(".blog-body").appendChild(document.createElement('p'));
+        paragraph.textContent = ss.val(); 
       });
+    }, {
+      onlyOnce: true
+    });
 }
