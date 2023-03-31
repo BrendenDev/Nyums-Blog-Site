@@ -19,9 +19,8 @@ const db = getDatabase(app);
 
 window.onload = function() {
     document.getElementById('blog-title').innerHTML = localStorage.getItem('openedPage');
+    //gets date of the blog opened from home, and then searches for its data in the database
     let blogDate = localStorage.getItem('openedPageDate');
-    //console.log(localStorage.getItem('openedPageDate'));
-    //need to fix this - purpose is to make string from date int, so it can find the specific blog in the database
     const date = blogDate.toString().substring(0,4) + "-" + blogDate.toString().substring(4, 6) + "-" + blogDate.toString().substring(6,8);
     setPage(date);
 };
